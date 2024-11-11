@@ -1,0 +1,58 @@
+0. Linux commends
+# show/hide the hidden files: ctrl+h
+
+1. ros base commands
+
+# source the target ros setup file
+source ./devel/setup.bash
+source ~/RoboTUNN/demo/devel/setup.bash
+source ~/RoboTUNN/wpr/devel/setup.bash
+
+# open a ros launch file
+roslaunch unitree_guide gazeboSim.launch
+
+# Compile the package
+catkin_make
+
+# show the current topic list
+rostopic list
+
+# show the current package list
+rospack list
+
+# observe specific topic
+rostopic echo /rtabmap/odom
+
+# run the ros core
+roscore
+
+# check the tf tree
+rosrun rqt_tf_tree rqt_tf_tree
+
+2. unitree ros1 plugin
+
+# start the unitree Gazebo simulation with parameter
+roslaunch unitree_guide gazeboSim.launch rname:=go1
+roslaunch unitree_move_base gazebo_move_base.launch rname:=go1
+
+# start the unitree keyboard controller
+sudo RoboTUNN/demo/devel/lib/unitree_guide/junior_ctrl
+
+# start the unitree rviz window
+roslaunch unitree_move_base rvizMoveBase.launch
+
+# transform the base to base_link
+rosrun tf static_transform_publisher 0 0 0 0 0 0 base base_link 100
+
+# start the gmapping for 2D mapping
+rosrun gmapping slam_gmapping scan:=scan
+
+# start the rtabmap_ros for 3D mapping
+rosrun rtabmap_ros rtabmap /odom:=/odom /rgb/image:=/camera_face/color/image_raw /depth/image:=/camera_face/depth/image_raw /rgb/camera_info:=/camera_face/color/camera_info
+
+cd ~/catkin_ws/src/rtabmap_ros/rtabmap_demos/launch/
+roslaunch demo_unitree_quadruped_robot.launch 
+
+
+#### husky ####
+
