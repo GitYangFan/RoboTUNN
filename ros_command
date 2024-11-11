@@ -1,42 +1,79 @@
 0. Linux commends
 # show/hide the hidden files: ctrl+h
 
-1. ros base commands
-
 # source the target ros setup file
 source ./devel/setup.bash
-source ~/RoboTUNN/demo/devel/setup.bash
-source ~/RoboTUNN/wpr/devel/setup.bash
 
-# open a ros launch file
-roslaunch unitree_guide gazeboSim.launch
+# show the node relationship
+rqt_graph
+
+# rviz
+rviz
 
 # Compile the package
 catkin_make
 
-# show the current topic list
+# show the list of topic
 rostopic list
-
-# show the current package list
-rospack list
-
-# observe specific topic
-rostopic echo /rtabmap/odom
-
-# run the ros core
-roscore
 
 # check the tf tree
 rosrun rqt_tf_tree rqt_tf_tree
 
-2. unitree ros1 plugin
+# observe specific topic
+rostopic echo /rtabmap/odom
 
-# start the unitree Gazebo simulation with parameter
-roslaunch unitree_guide gazeboSim.launch rname:=go1
-roslaunch unitree_move_base gazebo_move_base.launch rname:=go1
+# install the resource/dependency
+sudo apt install ros-noetic-lms1xx  # no underline
 
-# start the unitree keyboard controller
-sudo RoboTUNN/demo/devel/lib/unitree_guide/junior_ctrl
+# use the vim editor
+vim base_movement.py
+inserte mode: press i
+command mode: press :
+jump to line: 10G (to the line 10)
+
+##### Husky #####
+
+# ssh connect to the Husky
+ssh icom@192.168.0.108
+
+# manually tf transformation
+rosrun tf static_transform_publisher 1 0 0 0 0 0 map base_link 10
+
+# setup environment parameter
+export HUSKY_UST10_ENABLED=0
+
+# run the rviz environment for husky
+roslaunch husky_viz view_robot.launch
+
+# run the husky navigation node
+roslaunch husky_cartographer_navigation cartographer_demo.launch
+
+# run the gazebo simulation of husky
+roslaunch husky_gazebo husky_playpen.launch
+roslaunch husky_gazebo empty_world.launch
+
+# publish cmd_vel command
+rostopic pub /husky_velocity_controller/cmd_vel geometry_msgs/Twist "linear:
+  x: 0.0
+  y: 0.0
+  z: 0.0
+angular:
+  x: 0.0
+  y: 0.0
+  z: 0.1" -r 10
+
+# run the python3 script
+python3 base_movement.py
+
+
+##### Unitree #####
+
+# run the unitree gazebo simulation
+roslaunch unitree_guide gazeboSim.launch rname:=b2
+roslaunch unitree_move_base gazebo_move_base.launch rname:=b2
+
+# run the keyboard controller
+sudo ~/catkin_ws_unitree/devel/lib/unitree_guide/junior_ctrl
 
 # start the unitree rviz window
 roslaunch unitree_move_base rvizMoveBase.launch
@@ -53,6 +90,4 @@ rosrun rtabmap_ros rtabmap /odom:=/odom /rgb/image:=/camera_face/color/image_raw
 cd ~/catkin_ws/src/rtabmap_ros/rtabmap_demos/launch/
 roslaunch demo_unitree_quadruped_robot.launch 
 
-
-#### husky ####
 
