@@ -89,9 +89,14 @@ rosrun rtabmap_ros rtabmap /odom:=/odom /rgb/image:=/camera_face/color/image_raw
 
 cd ~/catkin_ws/src/rtabmap_ros/rtabmap_demos/launch/
 
-# add library path
-export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=/opt/ros/noetic/lib:$LD_LIBRARY_PATH
-roslaunch demo_unitree_quadruped_robot.launch 
+# when install the lcm library !!! change the Python to Python3 !!!
+# Python
+lcm_option(
+  LCM_ENABLE_PYTHON
+  "Build Python bindings and utilities"
+  PYTHON_FOUND Python3)
+if(LCM_ENABLE_PYTHON)
+  add_subdirectory(lcm-python)
+endif()
 
 
