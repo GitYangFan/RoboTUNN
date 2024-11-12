@@ -88,6 +88,10 @@ rosrun gmapping slam_gmapping scan:=scan
 rosrun rtabmap_ros rtabmap /odom:=/odom /rgb/image:=/camera_face/color/image_raw /depth/image:=/camera_face/depth/image_raw /rgb/camera_info:=/camera_face/color/camera_info
 
 cd ~/catkin_ws/src/rtabmap_ros/rtabmap_demos/launch/
+
+# add library path
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/opt/ros/noetic/lib:$LD_LIBRARY_PATH
 roslaunch demo_unitree_quadruped_robot.launch 
 
 
